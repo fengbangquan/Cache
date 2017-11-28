@@ -24,7 +24,7 @@ public class MemoryCache implements CacheUtils {
 
     @Override
     public void clear() {
-
+        mLruCache.evictAll();
     }
 
     @Override

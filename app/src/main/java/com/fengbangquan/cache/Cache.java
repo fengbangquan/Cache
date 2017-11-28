@@ -11,21 +11,46 @@ import java.io.IOException;
 public class Cache {
     private static MemoryCache mMemoryCache;
     private static DiskCache mDiskCache;
+
+    /**
+     * Opens the cache in {@code directory}, creating a cache if none exists
+     * there.
+     *
+     * @param directory a writable directory
+     * @param appVersion the value must be positive
+     * @param valueCount the number of values per cache entry. Must be positive.
+     * @param maxDiskSize the maximum number of bytes this cache should use to store
+     * @throws IOException if reading or writing the cache directory fails
+     */
     public static void open(File directory, int appVersion, int valueCount, long maxDiskSize) throws IOException {
         mMemoryCache = new MemoryCache();
         mDiskCache = new DiskCache(directory, appVersion, valueCount, maxDiskSize);
     }
 
+    /**
+     * Removes the entry for {@code key} if it exists.
+     * @throws IOException
+     */
     public static void remove(String key) throws IOException {
         mMemoryCache.remove(key);
         mDiskCache.remove(key);
     }
 
+    /**
+     * Closes the cache and deletes all of its stored values. This will delete
+     * all files in the diskCache directory including files that weren't created by
+     * the cache.
+     * @throws IOException
+     */
     public static void clear() throws IOException {
         mMemoryCache.clear();
         mDiskCache.clear();
     }
 
+    /**
+     * @param key the value of key can not contain (" ") , ("\n"), ("\r")
+     * @param value it does not support generic types
+     */
     public static void put(String key, Object value) {
         mMemoryCache.put(key, value);
         mDiskCache.put(key, value);
