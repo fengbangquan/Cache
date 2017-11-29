@@ -14,7 +14,7 @@ import java.io.OutputStream;
 /**
  * created by Feng Bangquan on 17-11-11
  */
-public class DiskCache implements CacheUtils {
+public class DiskCache implements CacheInterface {
 
     private DiskLruCache mDiskLruCache;
     public DiskCache(File directory, int appVersion, int valueCount, long maxSize) throws IOException {
@@ -25,15 +25,17 @@ public class DiskCache implements CacheUtils {
         try {
             DiskLruCache.Editor editor  = mDiskLruCache.edit(key);
             OutputStream outputStream = editor.newOutputStream(0);
+            ObjectOutputStream objectOutputStream;
             if (value instanceof Bitmap) {
                 outputStream.write(bitmapToBytes((Bitmap)value));
-                outputStream.close();
+            } else if (value instanceof byte[]) {
+                outputStream.write((byte[]) value);
             } else {
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(value);
-                outputStream.close();
                 objectOutputStream.close();
             }
+            outputStream.close();
             editor.commit();
             mDiskLruCache.flush();
         } catch (IOException e) {
@@ -68,31 +70,31 @@ public class DiskCache implements CacheUtils {
     }
 
     @Override
-    public Integer getInt(String key) {
+    public int getInt(String key) {
         Object object = getObject(key);
         return object == null ? null : (Integer) object;
     }
 
     @Override
-    public Long getLong(String key) {
+    public long getLong(String key) {
         Object object = getObject(key);
         return object == null ? null : (Long) object;
     }
 
     @Override
-    public Double getDouble(String key) {
+    public double getDouble(String key) {
         Object object = getObject(key);
         return object == null ? null : (Double) object;
     }
 
     @Override
-    public Float getFloat(String key) {
+    public float getFloat(String key) {
         Object object = getObject(key);
         return object == null ? null : (Float) object;
     }
 
     @Override
-    public Boolean getBoolean(String key) {
+    public boolean getBoolean(String key) {
         Object object = getObject(key);
         return object == null ? null : (Boolean) object;
     }
@@ -116,13 +118,8 @@ public class DiskCache implements CacheUtils {
 
     @Override
     public String getString(String key) {
-        try {
-            DiskLruCache.Snapshot snapshot = mDiskLruCache.get(key);
-            return snapshot == null ? null : snapshot.getString(0);
-        }catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Object object = getObject(key);
+        return object == null ? null : (String)object;
     }
 
     @Override

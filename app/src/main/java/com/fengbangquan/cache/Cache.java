@@ -19,11 +19,12 @@ public class Cache {
      * @param directory a writable directory
      * @param appVersion the value must be positive
      * @param valueCount the number of values per cache entry. Must be positive.
-     * @param maxDiskSize the maximum number of bytes this cache should use to store
+     * @param maxDiskSize the maximum number of bytes this diskCache should use to store
+     * @param maxMemorySize the maximum number of kilobytes this memoryCache should be to store
      * @throws IOException if reading or writing the cache directory fails
      */
-    public static void open(File directory, int appVersion, int valueCount, long maxDiskSize) throws IOException {
-        mMemoryCache = new MemoryCache();
+    public static void open(File directory, int appVersion, int valueCount, long maxDiskSize, int maxMemorySize) throws IOException {
+        mMemoryCache = new MemoryCache(maxMemorySize);
         mDiskCache = new DiskCache(directory, appVersion, valueCount, maxDiskSize);
     }
 
@@ -38,7 +39,7 @@ public class Cache {
 
     /**
      * Closes the cache and deletes all of its stored values. This will delete
-     * all files in the diskCache directory including files that weren't created by
+     * all files in the cache directory including files that weren't created by
      * the cache.
      * @throws IOException
      */
@@ -92,7 +93,7 @@ public class Cache {
         }
     }
 
-    public static Integer getInt(String key) {
+    public static int getInt(String key) {
         if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getInt(key);
         } else {
@@ -101,7 +102,7 @@ public class Cache {
     }
 
 
-    public static Long getLong(String key) {
+    public static long getLong(String key) {
         if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getLong(key);
         } else {
@@ -110,8 +111,8 @@ public class Cache {
     }
 
 
-    public static Double getDouble(String key) {
-        if (mMemoryCache.getDouble(key) != null) {
+    public static double getDouble(String key) {
+        if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getDouble(key);
         } else {
             return mDiskCache.getDouble(key);
@@ -119,8 +120,8 @@ public class Cache {
     }
 
 
-    public static Float getFloat(String key) {
-        if (mMemoryCache.getFloat(key) != null) {
+    public static float getFloat(String key) {
+        if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getFloat(key);
         } else {
             return mDiskCache.getFloat(key);
@@ -128,8 +129,8 @@ public class Cache {
     }
 
 
-    public static Boolean getBoolean(String key) {
-        if (mMemoryCache.getBoolean(key) != null) {
+    public static boolean getBoolean(String key) {
+        if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getBoolean(key);
         } else {
             return mDiskCache.getBoolean(key);
@@ -155,7 +156,7 @@ public class Cache {
     }
 
 
-    public byte[] getBytes(String key) {
+    public static byte[] getBytes(String key) {
         if (mMemoryCache.getBytes(key) != null) {
             return mMemoryCache.getBytes(key);
         } else {

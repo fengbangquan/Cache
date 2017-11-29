@@ -6,10 +6,9 @@ import android.util.LruCache;
 /**
  * created by Feng Bangquan on 17-11-11
  */
-public class MemoryCache implements CacheUtils {
+public class MemoryCache implements CacheInterface {
     private LruCache<Object, Object> mLruCache;
-    public MemoryCache(){
-        int maxMemorySize = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    public MemoryCache(int maxMemorySize){
         mLruCache = new LruCache<>(maxMemorySize);
     }
     @Override
@@ -33,33 +32,33 @@ public class MemoryCache implements CacheUtils {
     }
 
     @Override
-    public Integer getInt(String key) {
+    public int getInt(String key) {
         Object object = mLruCache.get(key);
-        return object == null ? null : (Integer) object;
+        return object == null ? null : (int) object;
     }
 
     @Override
-    public Long getLong(String key) {
+    public long getLong(String key) {
         Object object = mLruCache.get(key);
-        return object == null ? null : (Long) object;
+        return object == null ? null : (long) object;
     }
 
     @Override
-    public Double getDouble(String key) {
+    public double getDouble(String key) {
         Object object = mLruCache.get(key);
-        return object == null ? null : (Double) object;
+        return object == null ? null : (double) object;
     }
 
     @Override
-    public Float getFloat(String key) {
+    public float getFloat(String key) {
         Object object = mLruCache.get(key);
-        return object == null ? null : (Float) object;
+        return object == null ? null : (float) object;
     }
 
     @Override
-    public Boolean getBoolean(String key) {
+    public boolean getBoolean(String key) {
         Object object = mLruCache.get(key);
-        return object == null ? null : (Boolean) object;
+        return object == null ? null : (boolean) object;
     }
 
     @Override

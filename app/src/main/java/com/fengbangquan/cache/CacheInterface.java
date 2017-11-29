@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * created by Feng Bangquan on 17-11-11
  */
-public interface CacheUtils {
+public interface CacheInterface {
 
     void put(String key, Object value);
 
@@ -17,15 +17,15 @@ public interface CacheUtils {
 
     Object getObject(String key);
 
-    Integer getInt(String key);
+    int getInt(String key);
 
-    Long getLong(String key);
+    long getLong(String key);
 
-    Double getDouble(String key);
+    double getDouble(String key);
 
-    Float getFloat(String key);
+    float getFloat(String key);
 
-    Boolean getBoolean(String key);
+    boolean getBoolean(String key);
 
     Bitmap getBitmap(String key);
 
