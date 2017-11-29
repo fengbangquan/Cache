@@ -1,34 +1,39 @@
 package com.fengbangquan.cache;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A demo activity to guide how to use Cache to store data
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private static final String KEY_INT = "int";
+    private static final String KEY_STRING = "string";
+    private static final String KEY_BOOLEAN  = "boolean";
+    private static final String KEY_BITMAP = "bitmap";
+    private static final String KEY_BYTES = "bytes";
+    private static final long DISK_CACHE_SIZE = 1024 * 1024 * 10; // 100MB
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        System.out.println("the maxMemory is : " + maxMemory);
+        final int maxMemorySize = (int) (Runtime.getRuntime().maxMemory() / 1024);
         try {
-            File file = getDiskCacheDir("disk");
-            System.out.println("file is : " + file.getPath());
-            if (!file.exists()) {
-                file.mkdirs();
+            File cacheDir = getDiskCacheDir("diskCache");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
             }
-            Cache.open(file, 1, 1, 100*1024*1024/*100MB*/, (maxMemory / 8));
+            Cache.open(cacheDir, 1, 1, DISK_CACHE_SIZE, (maxMemorySize / 8));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,30 +62,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.picture, options);
-                long start = System.currentTimeMillis();
-                Cache.putBitmap("bitmap", bitmap);
-                System.out.println("time is : " + (System.currentTimeMillis() - start));
-                byte[] bytes = {10,20,30,40,50};
-                Cache.putBytes("byte", bytes);
-                Cache.putInt("int", 1200);
-                Cache.putString("string", "read the source code");
-                Cache.putBoolean("boolean", true);
+                Cache.putBitmap(KEY_BITMAP, bitmap);
+                byte[] bytes = {1, 2, 3, 4, 5};
+                Cache.putBytes(KEY_BYTES, bytes);
+                Cache.putInt(KEY_INT, 1024);
+                Cache.putString(KEY_STRING, "read the source code");
+                Cache.putBoolean(KEY_BOOLEAN, true);
             }
         }).start();
     }
 
     private void getCache() {
-        Bitmap bitmap = Cache.getBitmap("bitmap");
+        Bitmap bitmap = Cache.getBitmap(KEY_BITMAP);
         ((ImageView) findViewById(R.id.image_view)).setImageBitmap(bitmap);
-
-        System.out.println("bitmap size is : " + bitmap.getByteCount() / 1024);
-        byte[] bytes = Cache.getBytes("byte");
-        for (int i = 0; i < bytes.length; i++) {
-            System.out.println(bytes[i]);
+        byte[] bytes = Cache.getBytes(KEY_BYTES);
+        for (byte aByte : bytes) {
+            System.out.println(aByte);
         }
-        System.out.println(Cache.getInt("int"));
-        System.out.println(Cache.getString("string"));
-        System.out.println(Cache.getBoolean("boolean"));
+        System.out.println(Cache.getInt(KEY_INT));
+        System.out.println(Cache.getString(KEY_STRING));
+        System.out.println(Cache.getBoolean(KEY_BOOLEAN));
     }
 
     @Override
@@ -100,11 +101,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (v.getId() == R.id.remove) {
             try {
-                Cache.remove("int");
-                Cache.remove("string");
-                Cache.remove("boolean");
-                Cache.remove("bitmap");
-                Cache.remove("byte");
+                Cache.remove(KEY_INT);
+                Cache.remove(KEY_BYTES);
+                Cache.remove(KEY_BOOLEAN);
+                Cache.remove(KEY_BITMAP);
+                Cache.remove(KEY_BYTES);
             } catch (IOException e) {
                 e.printStackTrace();
             }
