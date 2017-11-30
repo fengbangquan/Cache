@@ -12,14 +12,32 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
- * created by Feng Bangquan on 17-11-11
+ * This class uses {@link DiskLruCache} to caches data and does not allow null
+ * to be used as a key or value. The more information can be found on {@link DiskLruCache}.
+ *
+ * Created by Feng Bangquan on 17-11-11
  */
 public class DiskCache implements CacheInterface {
 
     private DiskLruCache mDiskLruCache;
+
+    /**
+     * Opens the cache in {@code directory}, creating a cache if none exists
+     * there.
+     *
+     * @param directory a writable directory
+     * @param appVersion
+     * @param valueCount the number of values per cache entry. Must be positive.
+     * @param maxSize the maximum number of bytes this cache should use to store
+     * @throws IOException if reading or writing the cache directory fails
+     */
     public DiskCache(File directory, int appVersion, int valueCount, long maxSize) throws IOException {
             mDiskLruCache = DiskLruCache.open(directory, appVersion, valueCount, maxSize);
     }
+
+    /**
+     * Caches {@code value} for {@code key} in {@code directory}
+     */
     @Override
     public void put(String key, Object value) {
         try {
@@ -43,16 +61,35 @@ public class DiskCache implements CacheInterface {
         }
     }
 
+    /**
+     * Calls {@link DiskLruCache#remove(String)} to drop the entry for {@code key}
+     * if it exists and can be removed.
+     */
     @Override
     public void remove(String key) throws IOException {
         mDiskLruCache.remove(key);
     }
 
+    /**
+     * Calls {@link DiskLruCache#delete()} to close the cache and deletes all of its stored values.
+     * This will delete all files in the cache directory including files that weren't created by
+     * the cache.
+     */
     @Override
     public void clear() throws IOException {
         mDiskLruCache.delete();
     }
 
+    /**
+     * Returns an object named {@code key}, or null if it doesn't exist is not currently readable.
+     * The following methods call {@link #getObject(String)} to get the specific types' value:
+     * @see #getInt(String)
+     * @see #getLong(String)
+     * @see #getDouble(String)
+     * @see #getFloat(String)
+     * @see #getBoolean(String)
+     * @return Object
+     */
     @Override
     public Object getObject(String key) {
         try {
@@ -99,6 +136,10 @@ public class DiskCache implements CacheInterface {
         return object == null ? null : (Boolean) object;
     }
 
+    /**
+     *  Returns a Bitmap named {@code key}, or null if it doesn't exist is not currently readable.
+     *  @return Bitmap
+     */
     @Override
     public Bitmap getBitmap(String key) {
         try {
@@ -122,6 +163,10 @@ public class DiskCache implements CacheInterface {
         return object == null ? null : (String)object;
     }
 
+    /**
+     * Returns bytes[] named {@code key}, or null if it doesn't exist is not currently readable.
+     * @return
+     */
     @Override
     public byte[] getBytes(String key) {
         try {
@@ -133,6 +178,11 @@ public class DiskCache implements CacheInterface {
         }
     }
 
+    /**
+     * Transforms a Bitmap to bytes[]
+     * @param bitmap the Bitmap to be transformed
+     * @return a byte[] transforms from a Bitmap
+     */
     private byte[] bitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -148,6 +198,11 @@ public class DiskCache implements CacheInterface {
         return byteArrayOutputStream.toByteArray();
     }
 
+    /**
+     * Transforms InputStream to byte[]
+     * @param in the InputStream to be transformed
+     * @return a byte[] transforms from InputStream
+     */
     private byte[] streamToBytes(InputStream in) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int length;
