@@ -179,9 +179,9 @@ public class DiskCache implements CacheInterface {
     }
 
     /**
-     * Transforms a Bitmap to bytes[]
+     * Transforms Bitmap to bytes[]
      * @param bitmap the Bitmap to be transformed
-     * @return a byte[] transforms from a Bitmap
+     * @return a byte[] transforms from Bitmap
      */
     private byte[] bitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
