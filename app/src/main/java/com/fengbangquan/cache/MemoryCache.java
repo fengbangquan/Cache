@@ -109,4 +109,5 @@ public class MemoryCache implements CacheInterface {
         Object object = mLruCache.get(key);
         return object == null ? null : (byte[]) object;
     }
+
 }
