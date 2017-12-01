@@ -33,6 +33,4 @@ public interface ICache {
 
     byte[] getBytes(String key);
 
-
-
 }
