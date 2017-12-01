@@ -1,12 +1,13 @@
 package com.fengbangquan.cache;
 
 import android.graphics.Bitmap;
+import android.util.LruCache;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * created by Feng Bangquan on 17-11-11
+ * Created by Feng Bangquan on 17-11-11
  */
 public class Cache {
     private static MemoryCache mMemoryCache;
@@ -49,6 +50,9 @@ public class Cache {
     }
 
     /**
+     * Caches {@code value} for {@code key} calling {@link LruCache#put(Object, Object)}
+     * and {@link DiskCache#put(String, Object)}. The following methods putXXX(key, value)
+     * cache the specific types' data.
      * @param key the value of key can not contain (" ") , ("\n"), ("\r")
      * @param value it does not support generic types
      */
@@ -85,6 +89,13 @@ public class Cache {
         put(key, value);
     }
 
+    /**
+     * Returns the value for {@code key} if it exists in the MemoryCache or return
+     * the value if it exists in the DiskCache, otherwise return null. The following
+     * method getXXX(key, value) return specific types' value.
+     * @param key
+     * @return
+     */
     public static Object getObject(String key) {
         if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getObject(key);
@@ -101,7 +112,6 @@ public class Cache {
         }
     }
 
-
     public static long getLong(String key) {
         if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getLong(key);
@@ -110,7 +120,6 @@ public class Cache {
         }
     }
 
-
     public static double getDouble(String key) {
         if (mMemoryCache.getObject(key) != null) {
             return mMemoryCache.getDouble(key);
@@ -118,7 +127,6 @@ public class Cache {
             return mDiskCache.getDouble(key);
         }
     }
-
 
     public static float getFloat(String key) {
         if (mMemoryCache.getObject(key) != null) {
@@ -146,7 +154,6 @@ public class Cache {
         }
     }
 
-
     public static String getString(String key) {
         if (mMemoryCache.getString(key) != null) {
             return mMemoryCache.getString(key);
@@ -154,7 +161,6 @@ public class Cache {
             return mDiskCache.getString(key);
         }
     }
-
 
     public static byte[] getBytes(String key) {
         if (mMemoryCache.getBytes(key) != null) {

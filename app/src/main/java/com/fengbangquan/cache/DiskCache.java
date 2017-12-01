@@ -17,7 +17,7 @@ import java.io.OutputStream;
  *
  * Created by Feng Bangquan on 17-11-11
  */
-public class DiskCache implements CacheInterface {
+public class DiskCache implements ICache {
 
     private DiskLruCache mDiskLruCache;
 

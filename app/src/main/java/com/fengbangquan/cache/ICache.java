@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * created by Feng Bangquan on 17-11-11
  */
-public interface CacheInterface {
+public interface ICache {
 
     void put(String key, Object value);
 

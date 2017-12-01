@@ -9,7 +9,7 @@ import android.util.LruCache;
  *
  * Created by Feng Bangquan on 17-11-11
  */
-public class MemoryCache implements CacheInterface {
+public class MemoryCache implements ICache {
     private LruCache<Object, Object> mLruCache;
 
     /**
@@ -45,8 +45,8 @@ public class MemoryCache implements CacheInterface {
     }
 
     /**
-     * Returns the value for {@code key} if it exists in the cache or can be
-     * created by {@code #create}. The following methods call {@link #getObject(String)}
+     * Returns the value for {@code key} if it exists in the cache .
+     * The following methods call {@link #getObject(String)}
      * to get the specific types' value:
      * @see #getInt(String)
      * @see #getBitmap(String)
