@@ -14,8 +14,7 @@ public class Cache {
     private static DiskCache mDiskCache;
 
     /**
-     * Opens the cache in {@code directory}, creating a cache if none exists
-     * there.
+     * Opens the cache in {@code directory}, creating a cache if none exists there.
      *
      * @param directory a writable directory
      * @param appVersion the value must be positive

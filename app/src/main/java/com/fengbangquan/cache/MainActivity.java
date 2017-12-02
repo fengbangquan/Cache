@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         final int maxMemorySize = (int) (Runtime.getRuntime().maxMemory() / 1024);
         try {
-            File cacheDir = getDiskCacheDir("diskCache");
+            File cacheDir = getDiskCacheDir("mySharedPreferences");
             if (!cacheDir.exists()) {
                 cacheDir.mkdirs();
             }
@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 options.inSampleSize = 8;
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.picture, options);
                 Cache.putBitmap(KEY_BITMAP, bitmap);
-                byte[] bytes = {1, 2, 3, 4, 5};
-                Cache.putBytes(KEY_BYTES, bytes);
                 Cache.putInt(KEY_INT, 1024);
                 Cache.putString(KEY_STRING, "read the source code");
                 Cache.putBoolean(KEY_BOOLEAN, true);
@@ -75,13 +73,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getCache() {
         Bitmap bitmap = Cache.getBitmap(KEY_BITMAP);
         ((ImageView) findViewById(R.id.image_view)).setImageBitmap(bitmap);
-        byte[] bytes = Cache.getBytes(KEY_BYTES);
-        for (byte aByte : bytes) {
-            System.out.println(aByte);
-        }
-        System.out.println(Cache.getInt(KEY_INT));
-        System.out.println(Cache.getString(KEY_STRING));
-        System.out.println(Cache.getBoolean(KEY_BOOLEAN));
+        System.out.println("getInt: " + Cache.getInt(KEY_INT));
+        System.out.println("getString: " + Cache.getString(KEY_STRING));
+        System.out.println("getBoolean: " + Cache.getBoolean(KEY_BOOLEAN));
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
- * This class uses {@link DiskLruCache} to caches data and does not allow null
+ * This class uses {@link DiskLruCache} to cache data and does not allow null
  * to be used as a key or value. The more information can be found on {@link DiskLruCache}.
  *
  * Created by Feng Bangquan on 17-11-11
