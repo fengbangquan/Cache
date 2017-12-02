@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.util.LruCache;
 
 /**
- * This class uses {@link LruCache} to caches data and does not allow null
+ * This class uses {@link LruCache} to cache data and does not allow null
  * to be used as a key or value. The more information can be found on {@link LruCache}.
  *
  * Created by Feng Bangquan on 17-11-11
